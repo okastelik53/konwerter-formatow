@@ -1,0 +1,43 @@
+name: Build and Upload Executable
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 12 * * 1'  # co poniedziałek o 12:00
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          ./installResources.ps1
+
+      - name: Install PyInstaller
+        run: |
+          pip install pyinstaller
+
+      - name: Build executable
+        run: |
+          pyinstaller --onefile --noconsole main.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: konwerter
+          path: dist/*.exe
