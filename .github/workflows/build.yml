@@ -34,7 +34,7 @@ jobs:
 
       - name: Build executable
         run: |
-          pyinstaller --onefile --noconsole main.py
+          pyinstaller --onefile --noconsole Task1_args.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
